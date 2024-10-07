@@ -1,0 +1,106 @@
+Notatki:
+zwykła indeksacja macierzy (i,j) i-wiersze, j-kolumny 
+size(aa,1) 1-wiersze 2-kolumny
+Z kolei sum,mean 1-kolumny, 2-wiersze
+min i max:
+>> min(macierz,[],1) 1-kolumny 2-wiersz Pamiętać o []
+
+
+Zadania
+Strona 1 i 2
+1.
+>> wektor=[1:-0.1:-0.9]
+2.
+>> macierz=[1:3:40;2.1:-0.1:0.8]'
+3.
+>> macierz=[1:3;4:6;7:9].*[1;100;10]
+4.
+>> macierz=[1:3;4:6;7:9].*[1 0.1 10]
+5.
+>> wektor=[11:20];
+>> wektor>15 & wektor<=18
+6.
+>> [1:2:41;2.1:0.1:4.1]'*[1 1000]'
+7.
+>> [3 1;-1 1]^-1*[31;-9]
+8.
+>> macierz=[1:3;4:6;7:9];
+>> macierz(end-1:-1:1,:)
+
+Strona 3 i 4:
+9.
+>> macierz=[1:3;4:6;7:9];macierz(macierz>2&macierz<5)=macierz(macierz>2&macierz<5)+10;macierz
+Lub prościej
+>> macierz=[1:3;4:6;7:9];macierz(macierz>2&macierz<5)+=10;macierz
+10.
+>> macierz=[1:3;4 5 4;7 8 5];
+>> macierz(:,:)-=mean(macierz,1)
+
+Strona 5 i 6:
+11.
+>> macierz=round(5*rand([4,3]));
+>> for i=1:size(macierz,1)
+for j=size(macierz,2):-1:2
+macierz(i,j)+=macierz(i,j-1);
+end;
+end;
+12.
+>> macierz=round(5*rand(3,4));
+>> for i=1:size(macierz,1)
+for j=1:size(macierz,2)
+if macierz(i,j)>3
+macierz(i,j)=0;
+end;
+end;
+end;
+
+Strona 7:
+13.
+>> hold on
+>> a=(-pi:pi);
+>> plot(a,abs(sin(a)));
+>> hold off
+>> hold on
+>> a=(-pi:0.1:pi);
+>> plot(a,abs(sin(a)));
+>> plot(a,atan(a));
+>> xlim([-4 4]); ylim([-1.5 1.5]);
+>> xlabel('IKSY'); ylabel('IGREKI'); title('Bardzo wazny wykres');
+>> legend('abs(sin(x))','atan(x)');
+>> hold off;
+
+Strona 8 i 9:
+14.
+>> img_uint8=imread('rzeczka.jpg');
+>> img_dbl=double(img_uint8);
+>> for i=1:size(img_dbl,1)
+for j=10:50
+img_dbl(i,j,1)=255;img_dbl(i,j,2)=255;img_dbl(i,j,3)=0;
+end;
+end;
+>> imshow(img_dbl/255);
+15.
+>> img_uint8=imread('rzeczka.jpg');
+>> img_dbl=double(img_uint8);
+>> for i=1:size(img_dbl,1)
+for j=1:size(img_dbl,2)
+img_dbl2(i,j,1)=img_dbl(i,j,1);img_dbl2(i,j,2)=img_dbl(i,j,2);img_dbl2(i,j,3)=img_dbl(i,j,3);
+end;
+end;
+>> for i=1:size(img_dbl,1)
+for j=1:size(img_dbl,2)
+img_dbl2(i,size(img_dbl,2)+j,1)=img_dbl(i,size(img_dbl,2)-j+1,1);
+img_dbl2(i,size(img_dbl,2)+j,2)=img_dbl(i,size(img_dbl,2)-j+1,2);
+img_dbl2(i,size(img_dbl,2)+j,3)=img_dbl(i,size(img_dbl,2)-j+1,3);
+end;
+end;
+>> imshow(img_dbl2/255);
+
+16.
+>> img_uint8=imread('rzeczka.jpg');
+>> img_dbl=double(img_uint8);
+for j=1:size(img_dbl,2)
+img_dbl(i,j,1)=255-img_dbl(i,j,1);img_dbl(i,j,2)=255-img_dbl(i,j,2);img_dbl(i,j,3)=255-img_dbl(i,j,3);
+end;
+end;
+>> imshow(img_dbl/255);
