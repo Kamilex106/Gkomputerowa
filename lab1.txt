@@ -36,15 +36,24 @@ Lub prościej
 >> macierz=[1:3;4 5 4;7 8 5];
 >> macierz(:,:)-=mean(macierz,1)
 
-Strona 5 i 6:
 11.
+>> macierz=[1 2 3;4 5 4];
+>> macierz2=rand(size(macierz,1),size(macierz,2))
+
+lub
+>> macierz=[1 2 3;4 5 4];
+>> i=size(macierz,1);j=size(macierz,2);
+>> macierz2=rand(i,j)
+
+Strona 5 i 6:
+12.
 >> macierz=round(5*rand([4,3]));
 >> for i=1:size(macierz,1)
 for j=size(macierz,2):-1:2
 macierz(i,j)+=macierz(i,j-1);
 end;
 end;
-12.
+13.
 >> macierz=round(5*rand(3,4));
 >> for i=1:size(macierz,1)
 for j=1:size(macierz,2)
@@ -55,7 +64,7 @@ end;
 end;
 
 Strona 7:
-13.
+14.
 >> hold on
 >> a=(-pi:pi);
 >> plot(a,abs(sin(a)));
@@ -70,7 +79,7 @@ Strona 7:
 >> hold off;
 
 Strona 8 i 9:
-14.
+15.
 >> img_uint8=imread('rzeczka.jpg');
 >> img_dbl=double(img_uint8);
 >> for i=1:size(img_dbl,1)
@@ -79,7 +88,7 @@ img_dbl(i,j,1)=255;img_dbl(i,j,2)=255;img_dbl(i,j,3)=0;
 end;
 end;
 >> imshow(img_dbl/255);
-15.
+16.
 >> img_uint8=imread('rzeczka.jpg');
 >> img_dbl=double(img_uint8);
 >> for i=1:size(img_dbl,1)
@@ -96,7 +105,7 @@ end;
 end;
 >> imshow(img_dbl2/255);
 
-16.
+17.
 >> img_uint8=imread('rzeczka.jpg');
 >> img_dbl=double(img_uint8);
 for j=1:size(img_dbl,2)
