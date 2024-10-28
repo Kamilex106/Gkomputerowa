@@ -1,0 +1,231 @@
+1.
+img8=imread("rzeczka2.png");
+dimg=double(img8);
+minimum=min(dimg(:));
+maksimum=max(dimg(:));
+dimg2=(dimg-minimum)/(maksimum-minimum)*1;
+dimg2=dimg2.^(1/0.7);
+hold on
+subplot(1,2,1)
+imshow(dimg/255);
+title("org");
+subplot(1,2,2)
+imshow(dimg2/1);
+title("gamma 0.7");
+2.
+img8=imread("rzeczka2.png");
+dimg=double(img8);
+minimum=min(dimg(:));
+maksimum=max(dimg(:));
+dimg2=(dimg-minimum)/(maksimum-minimum)*1;
+dimg2=dimg2.^(1/1.5);
+hold on
+subplot(1,2,1)
+imshow(dimg/255);
+title("org");
+subplot(1,2,2)
+imshow(dimg2/1);
+title("gamma 1.5");
+3.
+img8=imread("rzeczka2.png");
+dimg=double(img8);
+wspJasnosci1=-50;
+wspJasnosci2=50;
+function wyjscie = PrzytnijZakres(wejscie,wspJasnosci)
+wejscie=wejscie+wspJasnosci;
+if wejscie<=0
+wyjscie=0;
+end;
+if wejscie>=0&&wejscie<=255
+wyjscie=wejscie;
+end;
+if wejscie>=255
+wyjscie=255;
+end;
+endfunction;
+
+function wyjscie = ZmienJasnosc(wejscie,wspJasnosci)
+for i=1:size(wejscie,1)
+for j=1:size(wejscie,2)
+wyjscie(i,j,1)=PrzytnijZakres(wejscie(i,j,1),wspJasnosci);
+wyjscie(i,j,2)=PrzytnijZakres(wejscie(i,j,2),wspJasnosci);
+wyjscie(i,j,3)=PrzytnijZakres(wejscie(i,j,3),wspJasnosci);
+end;
+end;
+endfunction;
+
+dimg2=ZmienJasnosc(dimg,-50);
+dimg3=ZmienJasnosc(dimg,50);
+
+hold on;
+subplot(1,3,1);
+imshow(dimg2/255);
+title("jasn -50");
+subplot(1,3,2);
+imshow(dimg/255);
+title("org");
+subplot(1,3,3);
+imshow(dimg3/255);
+title("jasn +50");
+
+4.
+img8=imread("rzeczka2.png");
+dimg=double(img8);
+function wyjscie = PrzytnijZakres(wejscie)
+if wejscie<=0
+wyjscie=0;
+end;
+if wejscie>=0&&wejscie<=255
+wyjscie=wejscie;
+end;
+if wejscie>=255
+wyjscie=255;
+end;
+endfunction;
+LUT=0:255;
+for i=1:length(LUT)
+LUT(i)=PrzytnijZakres(LUT(i)+50);
+end;
+function wyjscie = LUT_zastosuj(wejscie, LUT)
+wejscie_przyt = min(max(wejscie, 0), 255);
+wejscie_zaok=round(wejscie_przyt);
+wyjscie=LUT(wejscie_zaok+1);
+end;
+dimg2=LUT_zastosuj(dimg,LUT);
+hold on
+subplot(1,2,1)
+imshow(dimg/255);
+title("Org");
+subplot(1,2,2)
+imshow(dimg2/255);
+title("LUT z jasn +50");
+
+5.
+img8=imread("rzeczka2.png");
+dimg=double(img8);
+function wyjscie = PrzytnijZakres(wejscie)
+if wejscie<=0
+wyjscie=0;
+end;
+if wejscie>=0&&wejscie<=255
+wyjscie=wejscie;
+end;
+if wejscie>=255
+wyjscie=255;
+end;
+endfunction;
+LUT=0:255;
+for i=1:length(LUT)
+LUT(i)=(LUT(i)-0)/(255-0)*1;
+LUT(i)=LUT(i)^(1/1.5);
+LUT(i)=(LUT(i)-0)/(1-0)*255;
+end;
+function wyjscie = LUT_zastosuj(wejscie, LUT)
+wejscie_przyt = min(max(wejscie, 0), 255);
+wejscie_zaok=round(wejscie_przyt);
+wyjscie=LUT(wejscie_zaok+1);
+end;
+dimg2=LUT_zastosuj(dimg,LUT);
+hold on
+subplot(1,2,1)
+imshow(dimg/255);
+title("Org");
+subplot(1,2,2)
+imshow(dimg2/255);
+title("LUT z gamma 1.5");
+
+6.
+img8=imread("rzeczka2.png");
+dimg=double(img8);
+
+function wyjscie = wspMn(wspKontrastu)
+wyjscie=((255+wspKontrastu)/255)^2;
+endfunction;
+
+
+
+function wyjscie = PrzytnijZakres(wejscie)
+if wejscie<=0
+wyjscie=0;
+end;
+if wejscie>=0&&wejscie<=255
+wyjscie=wejscie;
+end;
+if wejscie>=255
+wyjscie=255;
+end;
+endfunction;
+LUT=0:255;
+LUT2=0:255;
+
+for i=1:length(LUT)
+LUT(i)=PrzytnijZakres(127.5+(LUT(i)-127.5)*wspMn(60));
+LUT2(i)=PrzytnijZakres(127.5+(LUT(i)-127.5)*wspMn(-60));
+end;
+
+function wyjscie = LUT_zastosuj(wejscie, LUT)
+wejscie_przyt = min(max(wejscie, 0), 255);
+wejscie_zaok=round(wejscie_przyt);
+wyjscie=LUT(wejscie_zaok+1);
+end;
+dimg2=LUT_zastosuj(dimg,LUT);
+dimg3=LUT_zastosuj(dimg,LUT2);
+
+hold on
+subplot(1,3,1)
+imshow(dimg3/255);
+title("kontrast -60");
+subplot(1,3,2)
+imshow(dimg/255);
+title("org");
+subplot(1,3,3)
+imshow(dimg2/255);
+title("kontrast +60");
+
+7.
+
+img8=imread("rzeczka2.png");
+dimg=double(img8);
+
+LUTR=0:255;
+LUTG=0:255;
+LUTB=0:255;
+
+for i=1:length(LUTR)
+
+if i<=60
+LUTR(i)=i*2;
+elseif i<110
+LUTR(i)=i-0.2;
+else
+LUTR(i)=i;
+end;
+
+if i<=50
+LUTB(i)=0;
+else
+LUTB(i)=i-50;
+end;
+end;
+
+
+function wyjscie = LUT_zastosuj(wejscie, LUT)
+wejscie_przyt = min(max(wejscie, 0), 255);
+wejscie_zaok=round(wejscie_przyt);
+wyjscie=LUT(wejscie_zaok+1);
+end;
+
+R = LUT_zastosuj(dimg(:,:,1), LUTR);
+G = LUT_zastosuj(dimg(:,:,2), LUTG);
+B = LUT_zastosuj(dimg(:,:,3), LUTB);
+
+for i=1:size(dimg,1)
+for j=1:size(dimg,2)
+dimg2(i,j,1)=R(i,j);
+dimg2(i,j,2)=G(i,j);
+dimg2(i,j,3)=B(i,j);
+end;
+end;
+
+imshow(dimg2/255);
+
