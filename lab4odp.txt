@@ -1,0 +1,550 @@
+//zad1
+
+img8=imread("rzeczka.jpg");
+dimg=double(img8);
+minimum=min(dimg(:));
+maksimum=max(dimg(:));
+dimg2=(dimg-minimum)/(maksimum-minimum)*1;
+dimg2=dimg2.^(1/1.5);
+minimum=min(dimg2(:));
+maksimum=max(dimg2(:));
+dimg2=(dimg2-minimum)/(maksimum-minimum)*255;
+
+function wyjscie = porownanievPS(stare,nowe)
+wyjscie=abs(nowe-stare);
+end;
+
+
+function wyjscie = PrzytnijZakres(wejscie)
+if wejscie<=0
+wyjscie=0;
+end;
+if wejscie>=0&&wejscie<=255
+wyjscie=wejscie;
+end;
+if wejscie>=255
+wyjscie=255;
+end;
+endfunction;
+
+
+function wyjscie = porownaniev2(stare,nowe)
+wyjscie=PrzytnijZakres((nowe-stare)+127.5);
+end;
+
+
+function wyjscie = porownanievPSmnoznik(stare,nowe,mnoznik)
+wyjscie=PrzytnijZakres(mnoznik*abs(nowe-stare));
+end;
+
+function wyjscie = porownaniev2mnoznik(stare,nowe,mnoznik)
+wyjscie=PrzytnijZakres(mnoznik*(nowe-stare)+127.5);
+end;
+
+
+for i=1:size(dimg,1)
+for j=1:size(dimg,2)
+for k=1:3
+dimgvps(i,j,k)=porownanievPSmnoznik(dimg(i,j,k),dimg2(i,j,k),4);
+dimgv2(i,j,k)=porownaniev2mnoznik(dimg(i,j,k),dimg2(i,j,k),3);
+end;
+end;
+end;
+
+hold on
+subplot(2,2,1)
+imshow(dimg/255);
+title("org");
+subplot(2,2,2)
+imshow(dimg2/255);
+title("gamma 1.5");
+subplot(2,2,3)
+imshow(dimgvps/255);
+title("porownanie v.PS * 4");
+subplot(2,2,4)
+imshow(dimgv2/255);
+title("porownanie v.2 * 3");
+
+
+
+
+
+
+
+
+//zad2
+img8=imread("rzeczka.jpg");
+dimg=double(img8);
+
+function wyjscie = PrzytnijZakres(wejscie)
+if wejscie<=0
+wyjscie=0;
+end;
+if wejscie>=0&&wejscie<=255
+wyjscie=wejscie;
+end;
+if wejscie>=255
+wyjscie=255;
+end;
+endfunction;
+
+function wyjscie = porownanievPSmnoznik(stare,nowe,mnoznik)
+wyjscie=PrzytnijZakres(mnoznik*abs(nowe-stare));
+end;
+
+function wyjscie = porownaniev2mnoznik(stare,nowe,mnoznik)
+wyjscie=PrzytnijZakres(mnoznik*(nowe-stare)+127.5);
+end;
+
+function wyjscie = SzaroscSrednia(r,g,b)
+wyjscie = (r+g+b)/3;
+end;
+
+function wyjscie = SzaroscSzary(r,g,b)
+wyjscie = (0.2126*r+0.7152*g+0.0722*b);
+end;
+
+for i=1:size(dimg,1)
+for j=1:size(dimg,2)
+srednia=SzaroscSrednia(dimg(i,j,1),dimg(i,j,2),dimg(i,j,3));
+szary=SzaroscSzary(dimg(i,j,1),dimg(i,j,2),dimg(i,j,3));
+for k=1:3
+dimg2(i,j,k)=szary;
+dimg3(i,j,k)=srednia;
+dimgvps(i,j,k)=porownanievPSmnoznik(dimg2(i,j,k),dimg3(i,j,k),4);
+dimgv2(i,j,k)=porownaniev2mnoznik(dimg2(i,j,k),dimg3(i,j,k),3);
+end;
+end;
+end;
+
+hold on
+subplot(2,2,1)
+imshow(dimg2/255);
+title("Szary");
+subplot(2,2,2)
+imshow(dimg3/255);
+title("Srednia");
+subplot(2,2,3)
+imshow(dimgvps/255);
+title("porownanie v.PS * 4");
+subplot(2,2,4)
+imshow(dimgv2/255);
+title("porownanie v.2 * 3");
+
+
+
+
+
+
+//zad3
+img8=imread("rzeczka.jpg");
+dimg=double(img8);
+
+function wyjscie = returnY(r,g,b)
+wyjscie = 0+0.299*r+0.587*g+0.114*b;
+end;
+
+function wyjscie = returnCb(r,g,b)
+wyjscie = 128-0.168736*r-0.331264*g+0.5*b;
+end;
+
+function wyjscie = returnCr(r,g,b)
+wyjscie = 128+0.5*r-0.418688*g-0.081312*b;
+end;
+
+for i=1:size(dimg,1)
+for j=1:size(dimg,2)
+y=returnY(dimg(i,j,1),dimg(i,j,2),dimg(i,j,3));
+Cb=returnCb(dimg(i,j,1),dimg(i,j,2),dimg(i,j,3));
+Cr=returnCr(dimg(i,j,1),dimg(i,j,2),dimg(i,j,3));
+for k=1:3
+dimg2(i,j,k)=y;
+dimg3(i,j,k)=Cb;
+dimg4(i,j,k)=Cr;
+end;
+end;
+end;
+
+hold on
+subplot(2,2,1)
+imshow(dimg/255);
+title("RGB");
+subplot(2,2,2)
+imshow(dimg2/255);
+title("Y");
+subplot(2,2,3)
+imshow(dimg3/255);
+title("Cb");
+subplot(2,2,4)
+imshow(dimg4/255);
+title("Cr");
+
+
+//zad4
+
+
+img8=imread("rzeczka.jpg");
+dimg=double(img8);
+
+function wyjscie = returnY(r,g,b)
+wyjscie = 0+0.299*r+0.587*g+0.114*b;
+end;
+
+function wyjscie = returnCb(r,g,b)
+wyjscie = 128-0.168736*r-0.331264*g+0.5*b;
+end;
+
+function wyjscie = returnCr(r,g,b)
+wyjscie = 128+0.5*r-0.418688*g-0.081312*b;
+end;
+
+function wyjscie = PrzytnijZakres(wejscie)
+if wejscie<=0
+wyjscie=0;
+end;
+if wejscie>=0&&wejscie<=255
+wyjscie=wejscie;
+end;
+if wejscie>=255
+wyjscie=255;
+end;
+endfunction;
+
+function wyjscie = porownanievPSmnoznik(stare,nowe,mnoznik)
+wyjscie=PrzytnijZakres(mnoznik*abs(nowe-stare));
+end;
+
+function wyjscie = porownaniev2mnoznik(stare,nowe,mnoznik)
+wyjscie=PrzytnijZakres(mnoznik*(nowe-stare)+127.5);
+end;
+
+for i=1:size(dimg,1)
+for j=1:size(dimg,2)
+Y=returnY(dimg(i,j,1),dimg(i,j,2),dimg(i,j,3));
+Cb=returnCb(dimg(i,j,1),dimg(i,j,2),dimg(i,j,3));
+Cr=returnCr(dimg(i,j,1),dimg(i,j,2),dimg(i,j,3));
+
+R=Y+1.402*(Cr-128);
+G=Y-0.344136*(Cb-128)-0.714136*(Cr-128);
+B=Y+1.772*(Cb-128);
+
+dimg2(i,j,1)=R;
+dimg2(i,j,2)=G;
+dimg2(i,j,3)=B;
+for k=1:3
+dimg3(i,j,k)=porownanievPSmnoznik(dimg(i,j,k),dimg2(i,j,k),1000000);
+dimg4(i,j,k)=porownaniev2mnoznik(dimg(i,j,k),dimg2(i,j,k),1000000);
+end;
+end;
+end;
+
+
+
+hold on
+subplot(2,2,1)
+imshow(dimg/255);
+title("ORG");
+subplot(2,2,2)
+imshow(dimg2/255);
+title("Po konwersji");
+subplot(2,2,3)
+imshow(dimg3/255);
+title("porownanie v.PS * 1000000");
+subplot(2,2,4)
+imshow(dimg4/255);
+title("porownanie v2 * 1000000");
+
+
+
+//zad 5 
+
+img8=imread("rzeczka.jpg");
+dimg=double(img8);
+
+function wyjscie = returnY(r,g,b)
+wyjscie = 0+0.299*r+0.587*g+0.114*b;
+end;
+
+function wyjscie = returnCb(r,g,b)
+wyjscie = 128-0.168736*r-0.331264*g+0.5*b;
+end;
+
+function wyjscie = returnCr(r,g,b)
+wyjscie = 128+0.5*r-0.418688*g-0.081312*b;
+end;
+
+function wyjscie = PrzytnijZakres(wejscie)
+if wejscie<=0
+wyjscie=0;
+end;
+if wejscie>=0&&wejscie<=255
+wyjscie=wejscie;
+end;
+if wejscie>=255
+wyjscie=255;
+end;
+endfunction;
+
+function wyjscie = porownanievPSmnoznik(stare,nowe,mnoznik)
+wyjscie=PrzytnijZakres(mnoznik*abs(nowe-stare));
+end;
+
+function wyjscie = porownaniev2mnoznik(stare,nowe,mnoznik)
+wyjscie=PrzytnijZakres(mnoznik*(nowe-stare)+127.5);
+end;
+
+for i=1:size(dimg,1)
+for j=1:size(dimg,2)
+Y=returnY(dimg(i,j,1),dimg(i,j,2),dimg(i,j,3));
+Cb=returnCb(dimg(i,j,1),dimg(i,j,2),dimg(i,j,3));
+Cr=returnCr(dimg(i,j,1),dimg(i,j,2),dimg(i,j,3));
+Y=round(Y);
+Cb=round(Cb);
+Cr=round(Cr);
+R=Y+1.402*(Cr-128);
+G=Y-0.344136*(Cb-128)-0.714136*(Cr-128);
+B=Y+1.772*(Cb-128);
+R=round(R);
+G=round(G);
+B=round(B);
+
+dimg2(i,j,1)=R;
+dimg2(i,j,2)=G;
+dimg2(i,j,3)=B;
+for k=1:3
+dimg3(i,j,k)=porownanievPSmnoznik(dimg(i,j,k),dimg2(i,j,k),250);
+dimg4(i,j,k)=porownaniev2mnoznik(dimg(i,j,k),dimg2(i,j,k),300);
+end;
+end;
+end;
+
+
+
+hold on
+subplot(2,2,1)
+imshow(dimg/255);
+title("ORG");
+subplot(2,2,2)
+imshow(dimg2/255);
+title("Po konwersji");
+subplot(2,2,3)
+imshow(dimg3/255);
+title("porownanie v.PS * 250");
+subplot(2,2,4)
+imshow(dimg4/255);
+title("porownanie v2 * 300");
+
+
+
+//zad6
+img8=imread("rzeczka.jpg");
+dimg=double(img8);
+
+minimum=min(dimg(:));
+maksimum=max(dimg(:));
+dimg2=(dimg-minimum)/(maksimum-minimum)*1;
+dimg2=dimg2.^(1/1.5);
+minimum=min(dimg2(:));
+maksimum=max(dimg2(:));
+dimg2=(dimg2-minimum)/(maksimum-minimum)*255;
+
+
+function wyjscie = returnY(r,g,b)
+wyjscie = 0+0.299*r+0.587*g+0.114*b;
+end;
+
+function wyjscie = returnCb(r,g,b)
+wyjscie = 128-0.168736*r-0.331264*g+0.5*b;
+end;
+
+function wyjscie = returnCr(r,g,b)
+wyjscie = 128+0.5*r-0.418688*g-0.081312*b;
+end;
+
+function wyjscie = PrzytnijZakres(wejscie)
+if wejscie<=0
+wyjscie=0;
+end;
+if wejscie>=0&&wejscie<=255
+wyjscie=wejscie;
+end;
+if wejscie>=255
+wyjscie=255;
+end;
+endfunction;
+
+function wyjscie = porownanievPSmnoznik(stare,nowe,mnoznik)
+wyjscie=PrzytnijZakres(mnoznik*abs(nowe-stare));
+end;
+
+function wyjscie = porownaniev2mnoznik(stare,nowe,mnoznik)
+wyjscie=PrzytnijZakres(mnoznik*(nowe-stare)+127.5);
+end;
+
+
+for i=1:size(dimg,1)
+for j=1:size(dimg,2)
+Y=returnY(dimg(i,j,1),dimg(i,j,2),dimg(i,j,3));
+Cb=returnCb(dimg(i,j,1),dimg(i,j,2),dimg(i,j,3));
+Cr=returnCr(dimg(i,j,1),dimg(i,j,2),dimg(i,j,3));
+dimgY(i,j)=Y;
+dimgCb(i,j)=Cb;
+dimgCr(i,j)=Cr;
+
+end;
+end;
+
+minimum=min(dimgY(:));
+maksimum=max(dimgY(:));
+dimgY=(dimgY-minimum)/(maksimum-minimum)*1;
+dimgY=dimgY.^(1/1.5);
+minimum=min(dimgY(:));
+maksimum=max(dimgY(:));
+dimgY=(dimgY-minimum)/(maksimum-minimum)*255;
+
+
+
+for i=1:size(dimg,1)
+for j=1:size(dimg,2)
+Y=dimgY(i,j);
+Cb=dimgCb(i,j);
+Cr=dimgCr(i,j);
+
+R=Y+1.402*(Cr-128);
+G=Y-0.344136*(Cb-128)-0.714136*(Cr-128);
+B=Y+1.772*(Cb-128);
+
+dimg3(i,j,1)=R;
+dimg3(i,j,2)=G;
+dimg3(i,j,3)=B;
+end;
+end;
+
+
+for i=1:size(dimg,1)
+for j=1:size(dimg,2)
+for k=1:3
+dimg4(i,j,k)=porownanievPSmnoznik(dimg2(i,j,k),dimg3(i,j,k),50);
+dimg5(i,j,k)=porownaniev2mnoznik(dimg2(i,j,k),dimg3(i,j,k),50);
+end;
+end;
+end;
+
+
+hold on
+subplot(2,2,1)
+imshow(dimg2/255);
+title("RGB gamma 1.5");
+subplot(2,2,2)
+imshow(dimg3/255);
+title("YCbCr, Y gamma 1.5, RGB");
+subplot(2,2,3)
+imshow(dimg4/255);
+title("porownanie v.PS * 50");
+subplot(2,2,4)
+imshow(dimg5/255);
+title("porownanie v2 * 50");
+
+
+
+//zad7
+img8=imread("rzeczka.jpg");
+dimg=double(img8);
+
+
+function wyjscie = returnY(r,g,b)
+wyjscie = 0+0.299*r+0.587*g+0.114*b;
+end;
+
+function wyjscie = returnCb(r,g,b)
+wyjscie = 128-0.168736*r-0.331264*g+0.5*b;
+end;
+
+function wyjscie = returnCr(r,g,b)
+wyjscie = 128+0.5*r-0.418688*g-0.081312*b;
+end;
+
+function wyjscie = PrzytnijZakres(wejscie)
+if wejscie<=0
+wyjscie=0;
+end;
+if wejscie>=0&&wejscie<=255
+wyjscie=wejscie;
+end;
+if wejscie>255
+wyjscie=255;
+end;
+endfunction;
+
+function wyjscie = porownanievPSmnoznik(stare,nowe,mnoznik)
+wyjscie=PrzytnijZakres(mnoznik*abs(nowe-stare));
+end;
+
+function wyjscie = porownaniev2mnoznik(stare,nowe,mnoznik)
+wyjscie=PrzytnijZakres(mnoznik*(nowe-stare)+127.5);
+end;
+
+function wyjscie = zwieksz_nasycenie(wejscie,PodbicieKolorow)
+wyjscie=PrzytnijZakres(128+(wejscie-128)*PodbicieKolorow);
+end;
+
+
+for i=1:size(dimg,1)
+for j=1:size(dimg,2)
+Y=returnY(dimg(i,j,1),dimg(i,j,2),dimg(i,j,3));
+Cb=returnCb(dimg(i,j,1),dimg(i,j,2),dimg(i,j,3));
+Cr=returnCr(dimg(i,j,1),dimg(i,j,2),dimg(i,j,3));
+Cb=zwieksz_nasycenie(Cb,1.5);
+Cr=zwieksz_nasycenie(Cr,1.5);
+
+dimgY(i,j)=Y;
+dimgCb(i,j)=Cb;
+dimgCr(i,j)=Cr;
+
+
+end;
+end;
+
+
+
+
+for i=1:size(dimg,1)
+for j=1:size(dimg,2)
+Y=dimgY(i,j);
+Cb=dimgCb(i,j);
+Cr=dimgCr(i,j);
+
+R=Y+1.402*(Cr-128);
+G=Y-0.344136*(Cb-128)-0.714136*(Cr-128);
+B=Y+1.772*(Cb-128);
+
+dimg2(i,j,1)=R;
+dimg2(i,j,2)=G;
+dimg2(i,j,3)=B;
+end;
+end;
+
+
+for i=1:size(dimg,1)
+for j=1:size(dimg,2)
+for k=1:3
+dimg3(i,j,k)=porownanievPSmnoznik(dimg(i,j,k),dimg2(i,j,k),10);
+dimg4(i,j,k)=porownaniev2mnoznik(dimg(i,j,k),dimg2(i,j,k),10);
+end;
+end;
+end;
+
+
+hold on
+subplot(2,2,1)
+imshow(dimg/255);
+title("org");
+subplot(2,2,2)
+imshow(dimg2/255);
+title("YCbCr, kolory * 1.5, RGB");
+subplot(2,2,3)
+imshow(dimg3/255);
+title("porownanie v.PS * 10");
+subplot(2,2,4)
+imshow(dimg4/255);
+title("porownanie v2 * 10");
