@@ -1,0 +1,397 @@
+//zad1
+img8=imread("rzeczka.jpg");
+dimg=double(img8);
+
+function wyjscie=porownanievPS(stare,nowe)
+wyjscie=abs(nowe-stare);
+end;
+
+function wyjscie=PrzytnijZakres(wejscie)
+if (wejscie<=0)
+wyjscie=0;
+elseif (wejscie>=255)
+wyjscie=255;
+else
+wyjscie=wejscie;
+end;
+end;
+
+
+function wyjscie=porownaniev2(stare,nowe)
+wyjscie=PrzytnijZakres((nowe-stare)+127.5);
+end;
+
+function wyjscie=porownanievPSmnoznik(stare,nowe,mnoznik)
+wyjscie=PrzytnijZakres(mnoznik*abs(nowe-stare));
+end;
+
+function wyjscie=porownaniev2mnoznik(stare,nowe,mnoznik)
+wyjscie=PrzytnijZakres(mnoznik*(nowe-stare)+127.5);
+end;
+
+
+minimum=min(dimg(:));
+maksimum=max(dimg(:));
+dimg2=(dimg-minimum)/(maksimum-minimum)*1;
+dimg2=dimg2.^(1/1.5);
+minimum=min(dimg2(:));
+maksimum=max(dimg2(:));
+dimg2=(dimg2-minimum)/(maksimum-minimum)*255;
+
+dimg3=porownanievPSmnoznik(dimg,dimg2,4);
+dimg4=porownaniev2mnoznik(dimg,dimg2,3);
+
+hold on
+subplot(2,2,1);
+imshow(dimg/255);
+title("org");
+subplot(2,2,2);
+imshow(dimg2/255);
+title("gamma 1.5");
+subplot(2,2,3);
+imshow(dimg3/255);
+title("porownanie v.PS * 4");
+subplot(2,2,4);
+imshow(dimg4/255);
+title("porownanie v.2 * 3");
+hold off
+
+//zad2
+img8=imread("rzeczka.jpg");
+dimg=double(img8);
+
+function wyjscie=SzaroscSrednia(r,g,b)
+wyjscie=(r+g+b)/3;
+end;
+
+function wyjscie=SzaroscSzary(r,g,b)
+wyjscie=0.2126*r+0.7152*g+0.0722*b;
+end;
+
+
+function wyjscie=PrzytnijZakres(wejscie)
+if (wejscie<=0)
+wyjscie=0;
+elseif (wejscie>=255)
+wyjscie=255;
+else
+wyjscie=wejscie;
+end;
+end;
+
+function wyjscie=porownanievPSmnoznik(stare,nowe,mnoznik)
+wyjscie=PrzytnijZakres(mnoznik*abs(nowe-stare));
+end;
+
+function wyjscie=porownaniev2mnoznik(stare,nowe,mnoznik)
+wyjscie=PrzytnijZakres(mnoznik*(nowe-stare)+127.5);
+end;
+
+
+dimg2=SzaroscSzary(dimg(:,:,1),dimg(:,:,2),dimg(:,:,3));
+dimg3=SzaroscSrednia(dimg(:,:,1),dimg(:,:,2),dimg(:,:,3));
+
+dimg4=porownanievPSmnoznik(dimg2,dimg3,4);
+dimg5=porownaniev2mnoznik(dimg2,dimg3,3);
+
+hold on
+subplot(2,2,1);
+imshow(dimg2/255);
+title("Szary");
+subplot(2,2,2);
+imshow(dimg3/255);
+title("Srednia");
+subplot(2,2,3);
+imshow(dimg4/255);
+title("porownanie v.PS * 4");
+subplot(2,2,4);
+imshow(dimg5/255);
+title("porownanie v.2 * 3");
+hold off
+
+//zad3
+img8=imread("rzeczka.jpg");
+dimg=double(img8);
+
+R=dimg(:,:,1);
+G=dimg(:,:,2);
+B=dimg(:,:,3);
+
+Y=0+0.299*R+0.587*G+0.114*B;
+Cb=128-0.168736*R-0.331264*G+0.5*B;
+Cr=128+0.5*R-0.418688*G-0.081312*B;
+
+
+
+hold on
+subplot(2,2,1);
+imshow(dimg/255);
+title("RGB");
+subplot(2,2,2);
+imshow(Y/255);
+title("Y");
+subplot(2,2,3);
+imshow(Cb/255);
+title("Cb");
+subplot(2,2,4);
+imshow(Cr/255);
+title("Cr");
+hold off
+
+//zad4
+img8=imread("rzeczka.jpg");
+dimg=double(img8);
+
+function wyjscie=PrzytnijZakres(wejscie)
+if (wejscie<=0)
+wyjscie=0;
+elseif (wejscie>=255)
+wyjscie=255;
+else
+wyjscie=wejscie;
+end;
+end;
+
+function wyjscie=porownanievPSmnoznik(stare,nowe,mnoznik)
+wyjscie=PrzytnijZakres(mnoznik*abs(nowe-stare));
+end;
+
+function wyjscie=porownaniev2mnoznik(stare,nowe,mnoznik)
+wyjscie=PrzytnijZakres(mnoznik*(nowe-stare)+127.5);
+end;
+
+R=dimg(:,:,1);
+G=dimg(:,:,2);
+B=dimg(:,:,3);
+
+Y=0+0.299*R+0.587*G+0.114*B;
+Cb=128-0.168736*R-0.331264*G+0.5*B;
+Cr=128+0.5*R-0.418688*G-0.081312*B;
+
+R=Y+1.402*(Cr-128);
+G=Y-0.344136*(Cb-128)-0.714136*(Cr-128);
+B=Y+1.772*(Cb-128);
+
+
+dimg2(:,:,1)=R;dimg2(:,:,2)=G;dimg2(:,:,3)=B;
+
+dimg3=porownanievPSmnoznik(dimg,dimg2,1000000);
+dimg4=porownaniev2mnoznik(dimg,dimg2,1000000);
+
+hold on
+subplot(1,2,1);
+imshow(dimg3/255);
+title("porownanie vPS * 1000000");
+subplot(1,2,2);
+imshow(dimg4/255);
+title("porownanie v2 * 1000000");
+hold off
+
+//zad5
+img8=imread("rzeczka.jpg");
+dimg=double(img8);
+
+function wyjscie=PrzytnijZakres(wejscie)
+if (wejscie<=0)
+wyjscie=0;
+elseif (wejscie>=255)
+wyjscie=255;
+else
+wyjscie=wejscie;
+end;
+end;
+
+function wyjscie=porownanievPSmnoznik(stare,nowe,mnoznik)
+wyjscie=PrzytnijZakres(mnoznik*abs(nowe-stare));
+end;
+
+function wyjscie=porownaniev2mnoznik(stare,nowe,mnoznik)
+wyjscie=PrzytnijZakres(mnoznik*(nowe-stare)+127.5);
+end;
+
+R=dimg(:,:,1);
+G=dimg(:,:,2);
+B=dimg(:,:,3);
+
+Y=0+0.299*R+0.587*G+0.114*B;
+Cb=128-0.168736*R-0.331264*G+0.5*B;
+Cr=128+0.5*R-0.418688*G-0.081312*B;
+
+Y=round(Y);
+Cb=round(Cb);
+Cr=round(Cr);
+
+R=Y+1.402*(Cr-128);
+G=Y-0.344136*(Cb-128)-0.714136*(Cr-128);
+B=Y+1.772*(Cb-128);
+
+PrzytnijZakres(R);
+PrzytnijZakres(G);
+PrzytnijZakres(B);
+
+R=round(R);
+G=round(G);
+B=round(B);
+
+dimg2(:,:,1)=R;dimg2(:,:,2)=G;dimg2(:,:,3)=B;
+
+dimg3=porownanievPSmnoznik(dimg,dimg2,250);
+dimg4=porownaniev2mnoznik(dimg,dimg2,300);
+
+hold on
+subplot(2,2,1);
+imshow(dimg/255);
+title("RGB org");
+subplot(2,2,2);
+imshow(dimg2/255);
+title("to YCbCr, to RGB");
+subplot(2,2,3);
+imshow(dimg3/255);
+title("porownanie v.PS * 250");
+subplot(2,2,4);
+imshow(dimg4/255);
+title("porownanie v.2 * 300");
+hold off
+
+
+//zad6
+img8=imread("rzeczka.jpg");
+dimg=double(img8);
+
+minimum=min(dimg(:));
+maksimum=max(dimg(:));
+dimg2=(dimg-minimum)/(maksimum-minimum)*1;
+dimg2=dimg2.^(1/1.5);
+minimum=min(dimg2(:));
+maksimum=max(dimg2(:));
+dimg2=(dimg2-minimum)/(maksimum-minimum)*255;
+
+
+function wyjscie=PrzytnijZakres(wejscie)
+if (wejscie<=0)
+wyjscie=0;
+elseif (wejscie>=255)
+wyjscie=255;
+else
+wyjscie=wejscie;
+end;
+end;
+
+function wyjscie=porownanievPSmnoznik(stare,nowe,mnoznik)
+wyjscie=PrzytnijZakres(mnoznik*abs(nowe-stare));
+end;
+
+function wyjscie=porownaniev2mnoznik(stare,nowe,mnoznik)
+wyjscie=PrzytnijZakres(mnoznik*(nowe-stare)+127.5);
+end;
+
+R=dimg(:,:,1);
+G=dimg(:,:,2);
+B=dimg(:,:,3);
+
+Y=0+0.299*R+0.587*G+0.114*B;
+Cb=128-0.168736*R-0.331264*G+0.5*B;
+Cr=128+0.5*R-0.418688*G-0.081312*B;
+
+minimum=min(Y(:));
+maksimum=max(Y(:));
+Y=(Y-minimum)/(maksimum-minimum)*1;
+Y=Y.^(1/1.5);
+minimum=min(Y(:));
+maksimum=max(Y(:));
+Y=(Y-minimum)/(maksimum-minimum)*255;
+
+R=Y+1.402*(Cr-128);
+G=Y-0.344136*(Cb-128)-0.714136*(Cr-128);
+B=Y+1.772*(Cb-128);
+
+PrzytnijZakres(R);
+PrzytnijZakres(G);
+PrzytnijZakres(B);
+
+dimg3(:,:,1)=R;dimg3(:,:,2)=G;dimg3(:,:,3)=B;
+
+dimg4=porownanievPSmnoznik(dimg2,dimg3,50);
+dimg5=porownaniev2mnoznik(dimg2,dimg3,50);
+
+hold on
+subplot(2,2,1);
+imshow(dimg2/255);
+title("RGB gamma 1.5");
+subplot(2,2,2);
+imshow(dimg3/255);
+title("YCbCr, Y gamma 1.5,RGB");
+subplot(2,2,3);
+imshow(dimg4/255);
+title("porownanie v.PS * 50");
+subplot(2,2,4);
+imshow(dimg5/255);
+title("porownanie v.2 * 50");
+hold off
+
+//zad7
+img8=imread("rzeczka.jpg");
+dimg=double(img8);
+
+
+function wyjscie=PrzytnijZakres(wejscie)
+if (wejscie<=0)
+wyjscie=0;
+elseif (wejscie>=255)
+wyjscie=255;
+else
+wyjscie=wejscie;
+end;
+end;
+
+function wyjscie=porownanievPSmnoznik(stare,nowe,mnoznik)
+wyjscie=PrzytnijZakres(mnoznik*abs(nowe-stare));
+end;
+
+function wyjscie=porownaniev2mnoznik(stare,nowe,mnoznik)
+wyjscie=PrzytnijZakres(mnoznik*(nowe-stare)+127.5);
+end;
+
+function wyjscie=ZwiekszNasycenie(wejscie,PodbicieKolorow)
+wyjscie=PrzytnijZakres(128+(wejscie-128)*PodbicieKolorow);
+end;
+
+
+R=dimg(:,:,1);
+G=dimg(:,:,2);
+B=dimg(:,:,3);
+
+Y=0+0.299*R+0.587*G+0.114*B;
+Cb=128-0.168736*R-0.331264*G+0.5*B;
+Cr=128+0.5*R-0.418688*G-0.081312*B;
+
+Cb=ZwiekszNasycenie(Cb,1.5);
+Cr=ZwiekszNasycenie(Cr,1.5);
+
+R=Y+1.402*(Cr-128);
+G=Y-0.344136*(Cb-128)-0.714136*(Cr-128);
+B=Y+1.772*(Cb-128);
+
+PrzytnijZakres(R);
+PrzytnijZakres(G);
+PrzytnijZakres(B);
+
+dimg2(:,:,1)=R;dimg2(:,:,2)=G;dimg2(:,:,3)=B;
+
+dimg3=porownanievPSmnoznik(dimg,dimg2,10);
+dimg4=porownaniev2mnoznik(dimg,dimg2,10);
+
+hold on
+subplot(2,2,1);
+imshow(dimg/255);
+title("org");
+subplot(2,2,2);
+imshow(dimg2/255);
+title("YCbCr, kolory * 1.5,RGB");
+subplot(2,2,3);
+imshow(dimg3/255);
+title("porownanie v.PS * 10");
+subplot(2,2,4);
+imshow(dimg4/255);
+title("porownanie v.2 * 10");
+hold off

@@ -1,0 +1,254 @@
+//zad1
+img8=imread("rzeczka2.png");
+dimg=double(img8);
+
+minimum=min(dimg(:));
+maksimum=max(dimg(:));
+dimg2=(dimg-minimum)/(maksimum-minimum)*1;
+dimg2=dimg2.^(1/0.7);
+
+
+hold on
+subplot(1,2,1);
+imshow(dimg/255);
+title("org");
+subplot(1,2,2);
+imshow(dimg2/1);
+title("gamma 0.7");
+hold off
+
+//zad2
+img8=imread("rzeczka2.png");
+dimg=double(img8);
+
+minimum=min(dimg(:));
+maksimum=max(dimg(:));
+dimg2=(dimg-minimum)/(maksimum-minimum)*1;
+dimg2=dimg2.^(1/1.5);
+
+
+hold on
+subplot(1,2,1);
+imshow(dimg/255);
+title("org");
+subplot(1,2,2);
+imshow(dimg2/1);
+title("gamma 1.5");
+hold off
+
+//zad3
+img8=imread("rzeczka2.png");
+dimg=double(img8);
+
+function wyjscie=PrzytnijZakres(wejscie)
+	if (wejscie<=0)
+		wyjscie=0;
+	elseif (wejscie>=255)
+		wyjscie=255;
+	else
+		wyjscie=wejscie;
+	end
+endfunction
+
+
+function wyjscie=ZmienJasnosc(wejscie,wspJasnosci)
+wyjscie=PrzytnijZakres(wejscie+wspJasnosci);
+endfunction;
+
+dimg2=ZmienJasnosc(dimg,-50);
+dimg3=ZmienJasnosc(dimg,50);
+
+hold on
+subplot(1,3,1);
+imshow(dimg2/255);
+title("jasn -50");
+subplot(1,3,2);
+imshow(dimg/255);
+title("org");
+subplot(1,3,3);
+imshow(dimg3/255);
+title("jasn +50");
+hold off
+
+//zad4
+img8=imread("rzeczka2.png");
+dimg=double(img8);
+
+LUT1=0:255;
+function wyjscie=PrzytnijZakres(wejscie)
+	if (wejscie<=0)
+		wyjscie=0;
+	elseif (wejscie>=255)
+		wyjscie=255;
+	else
+		wyjscie=wejscie;
+	end
+endfunction
+
+LUT1=PrzytnijZakres(LUT1+50);
+
+function wyjscie=LUT_zastosuj(wejscie,LUT)
+d_przyt=PrzytnijZakres(wejscie);
+d_zaok=round(d_przyt);
+wyjscie=LUT(d_zaok+1);
+endfunction;
+
+dimg2=LUT_zastosuj(dimg,LUT1);
+
+hold on
+subplot(1,2,1);
+imshow(dimg/255);
+title("org");
+subplot(1,2,2);
+imshow(dimg2/255);
+title("LUT z jasn + 50");
+hold off
+
+//zad5
+img8=imread("rzeczka2.png");
+dimg=double(img8);
+
+LUT1=0:255;
+function wyjscie=PrzytnijZakres(wejscie)
+	if (wejscie<=0)
+		wyjscie=0;
+	elseif (wejscie>=255)
+		wyjscie=255;
+	else
+		wyjscie=wejscie;
+	end
+endfunction
+
+LUT1=(LUT1-0)/(255-0)*1;
+LUT1=LUT1.^(1/1.5);
+minimum=min(LUT1);
+maksimum=max(LUT1);
+
+
+LUT1=(LUT1-minimum)/(maksimum-minimum)*255;
+
+function wyjscie=LUT_zastosuj(wejscie,LUT)
+d_przyt=PrzytnijZakres(wejscie);
+d_zaok=round(d_przyt);
+wyjscie=LUT(d_zaok+1);
+endfunction;
+
+dimg2=LUT_zastosuj(dimg,LUT1);
+
+hold on
+subplot(1,2,1);
+imshow(dimg/255);
+title("org");
+subplot(1,2,2);
+imshow(dimg2/255);
+title("LUT z gamma 1.5");
+hold off
+
+
+//zad6
+img8=imread("rzeczka2.png");
+dimg=double(img8);
+
+LUT1=0:255;
+LUT2=0:255;
+
+function wyjscie=PrzytnijZakres(wejscie)
+	if (wejscie<=0)
+		wyjscie=0;
+	elseif (wejscie>=255)
+		wyjscie=255;
+	else
+		wyjscie=wejscie;
+	end
+end;
+
+function wyjscie=ZmienKontrast(wejscie,wspKontrastu)
+wspMn=((255+wspKontrastu)/255)^2;
+wyjscie=PrzytnijZakres(127.5+(wejscie-127.5)*wspMn);
+end;
+
+function wyjscie=LUT_zastosuj(wejscie,LUT)
+d_przyt=PrzytnijZakres(wejscie);
+d_zaok=round(d_przyt);
+wyjscie=LUT(d_zaok+1);
+end;
+
+LUT1=ZmienKontrast(LUT1,-60);
+LUT2=ZmienKontrast(LUT2,60);
+
+
+dimg2=LUT_zastosuj(dimg,LUT1);
+dimg3=LUT_zastosuj(dimg,LUT2);
+
+
+hold on
+subplot(1,3,1);
+imshow(dimg2/255);
+title("kontrast -60");
+subplot(1,3,2);
+imshow(dimg/255);
+title("org");
+subplot(1,3,3);
+imshow(dimg3/255);
+title("kontrast +60");
+hold off
+
+
+//zad7
+img8=imread("rzeczka2.png");
+dimg=double(img8);
+
+LUTR=0:255;
+LUTG=0:255;
+LUTB=0:255;
+
+
+function wyjscie=PrzytnijZakres(wejscie)
+	if (wejscie<=0)
+		wyjscie=0;
+	elseif (wejscie>=255)
+		wyjscie=255;
+	else
+		wyjscie=wejscie;
+	end
+end;
+
+function wyjscie=LUT_zastosuj(wejscie,LUT)
+d_przyt=PrzytnijZakres(wejscie);
+d_zaok=round(d_przyt);
+wyjscie=LUT(d_zaok+1);
+end;
+
+for (i=1:length(LUTR))
+
+if (i<=61)
+LUTR(i)=LUTR(i)*2;
+elseif (i<=111)
+LUTR(i)=LUTR(i)-0.2;
+else
+LUTR(i)=LUTR(i);
+end;
+
+if (i<=51)
+LUTB(i)=0;
+else
+LUTB(i)=LUTB(i)/2;
+end;
+
+end;
+
+
+dimg2(:,:,1)=LUT_zastosuj(dimg(:,:,1),LUTR);
+dimg2(:,:,2)=LUT_zastosuj(dimg(:,:,2),LUTG);
+dimg2(:,:,3)=LUT_zastosuj(dimg(:,:,3),LUTB);
+
+
+
+hold on
+subplot(1,2,1);
+imshow(dimg/255);
+title("org");
+subplot(1,2,2);
+imshow(dimg2/255);
+title("Po transformacji");
+hold off
