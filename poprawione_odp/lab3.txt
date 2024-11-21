@@ -221,18 +221,20 @@ end;
 
 for (i=1:length(LUTR))
 
-if (i<=61)
+if (i<=60)
 LUTR(i)=LUTR(i)*2;
-elseif (i<=111)
-LUTR(i)=LUTR(i)-0.2;
+elseif (i<=110)
+LUTR(i)=(-0.2)*i+132;
 else
 LUTR(i)=LUTR(i);
 end;
 
+
+
 if (i<=51)
 LUTB(i)=0;
 else
-LUTB(i)=LUTB(i)/2;
+LUTB(i)=1.25*i-62.5;
 end;
 
 end;
@@ -252,3 +254,6 @@ subplot(1,2,2);
 imshow(dimg2/255);
 title("Po transformacji");
 hold off
+
+figure;
+hold on; plot(LUTR);plot(LUTG);plot(LUTB);hold off
