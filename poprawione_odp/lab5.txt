@@ -1,0 +1,816 @@
+//zad1
+img8=imread("rzeczka_mniejsza.jpg");
+dimg=double(img8);
+
+function wyjsciek= returnH(R,G,B,MaxRGB,Chroma)
+if (Chroma<=0.001)
+wyjscie=0;
+elseif (R==MaxRGB&&Chroma>0.001)
+wyjscie=mod((G-B)/Chroma,6);
+elseif (G==MaxRGB&&Chroma>0.001)
+wyjscie=((B-R)/Chroma)+2;
+elseif (B==MaxRGB&&Chroma>0.001)
+wyjscie=((R-G)/Chroma)+4;
+end;
+wyjsciek=wyjscie*60;
+end;
+
+function wyjscie=returnL(MinRGB,MaxRGB)
+wyjscie=(MaxRGB+MinRGB)/2;
+end;
+
+function wyjscie=returnS(L,Chroma)
+if (L<=0.001||L>=0.999)
+wyjscie=0;
+else
+wyjscie=Chroma/(1-abs(2*L-1));
+end;
+end;
+
+minimum=min(dimg(:));
+maksimum=max(dimg(:));
+dimg=(dimg-minimum)/(maksimum-minimum)*1;
+
+dimgR=dimg(:,:,1);
+dimgG=dimg(:,:,2);
+dimgB=dimg(:,:,3);
+
+
+
+for i=1:size(dimg,1)
+for j=1:size(dimg,2)
+
+MaxRGB=max([dimgR(i,j),dimgG(i,j),dimgB(i,j)]);
+MinRGB=min([dimgR(i,j),dimgG(i,j),dimgB(i,j)]);
+Chroma=MaxRGB-MinRGB;
+
+dimgH(i,j)=returnH(dimgR(i,j),dimgG(i,j),dimgB(i,j),MaxRGB,Chroma);
+L=returnL(MinRGB,MaxRGB);
+dimgL(i,j)=L;
+dimgS(i,j)=returnS(L,Chroma);
+end;
+end;
+hold on
+subplot(2,2,1);
+imshow(dimg/1);
+title("RGB");
+subplot(2,2,2);
+imshow(dimgH/360);
+title("Hue /360stopni");
+subplot(2,2,3);
+imshow(dimgS/1);
+title("Saturation");
+subplot(2,2,4);
+imshow(dimgL/1);
+title("Lightness");
+hold off
+
+
+//zad2
+img8=imread("rzeczka_mniejsza.jpg");
+dimg=double(img8);
+
+function wyjsciek= returnH(R,G,B,MaxRGB,Chroma)
+if (Chroma<=0.001)
+wyjscie=0;
+elseif (R==MaxRGB&&Chroma>0.001)
+wyjscie=mod((G-B)/Chroma,6);
+elseif (G==MaxRGB&&Chroma>0.001)
+wyjscie=((B-R)/Chroma)+2;
+elseif (B==MaxRGB&&Chroma>0.001)
+wyjscie=((R-G)/Chroma)+4;
+end;
+wyjsciek=wyjscie*60;
+end;
+
+function wyjscie=returnL(MinRGB,MaxRGB)
+wyjscie=(MaxRGB+MinRGB)/2;
+end;
+
+function wyjscie=returnS(L,Chroma)
+if (L<=0.001||L>=0.999)
+wyjscie=0;
+else
+wyjscie=Chroma/(1-abs(2*L-1));
+end;
+end;
+
+function wyjscieK=returnR(H,X,Chroma,MinRGB)
+if (H>=0&&H<=60)
+wyjscie=Chroma;
+elseif (H>60&&H<=120)
+wyjscie=X;
+elseif (H>120&&H<=180)
+wyjscie=0;
+elseif (H>180&&H<=240)
+wyjscie=0;
+elseif (H>240&&H<=300)
+wyjscie=X;
+elseif (H>300&&H<=360)
+wyjscie=Chroma;
+end;
+wyjscieK=wyjscie+MinRGB;
+end;
+
+function wyjscieK=returnG(H,X,Chroma,MinRGB)
+if (H>=0&&H<=60)
+wyjscie=X;
+elseif (H>60&&H<=120)
+wyjscie=Chroma;
+elseif (H>120&&H<=180)
+wyjscie=Chroma;
+elseif (H>180&&H<=240)
+wyjscie=X;
+elseif (H>240&&H<=300)
+wyjscie=0;
+elseif (H>300&&H<=360)
+wyjscie=0;
+end;
+wyjscieK=wyjscie+MinRGB;
+end;
+
+
+function wyjscieK=returnB(H,X,Chroma,MinRGB)
+if (H>=0&&H<=60)
+wyjscie=0;
+elseif (H>60&&H<=120)
+wyjscie=0;
+elseif (H>120&&H<=180)
+wyjscie=X;
+elseif (H>180&&H<=240)
+wyjscie=Chroma;
+elseif (H>240&&H<=300)
+wyjscie=Chroma;
+elseif (H>300&&H<=360)
+wyjscie=X;
+end;
+wyjscieK=wyjscie+MinRGB;
+end;
+
+function wyjscie=returnChroma(L,S)
+wyjscie=(1-abs(2*L-1))*S;
+end;
+
+function wyjscie=returnX(Chroma,H)
+wyjscie=Chroma*(1-abs(mod(H/60,2)-1));
+end;
+
+function wyjscie=returnMinRGB(L,Chroma)
+wyjscie=L-(Chroma/2);
+end;
+
+function wyjscie = PrzytnijZakres(wejscie)
+if wejscie<=0
+wyjscie=0;
+end;
+if wejscie>=0&&wejscie<=255
+wyjscie=wejscie;
+end;
+if wejscie>255
+wyjscie=255;
+end;
+endfunction;
+
+function wyjscie = porownanievPSmnoznik(stare,nowe,mnoznik)
+wyjscie=PrzytnijZakres(mnoznik*abs(nowe-stare));
+end;
+
+function wyjscie = porownaniev2mnoznik(stare,nowe,mnoznik)
+wyjscie=PrzytnijZakres(mnoznik*(nowe-stare)+127.5);
+end;
+
+
+minimum=min(dimg(:));
+maksimum=max(dimg(:));
+dimg2=(dimg-minimum)/(maksimum-minimum)*1;
+
+dimgR=dimg2(:,:,1);
+dimgG=dimg2(:,:,2);
+dimgB=dimg2(:,:,3);
+
+
+
+for i=1:size(dimg,1)
+for j=1:size(dimg,2)
+
+MaxRGB=max([dimgR(i,j),dimgG(i,j),dimgB(i,j)]);
+MinRGB=min([dimgR(i,j),dimgG(i,j),dimgB(i,j)]);
+Chroma=MaxRGB-MinRGB;
+
+dimgH(i,j)=returnH(dimgR(i,j),dimgG(i,j),dimgB(i,j),MaxRGB,Chroma);
+L=returnL(MinRGB,MaxRGB);
+dimgL(i,j)=L;
+dimgS(i,j)=returnS(L,Chroma);
+
+Chroma=returnChroma(L,dimgS(i,j));
+X=returnX(Chroma,dimgH(i,j));
+MinRGB=returnMinRGB(L,Chroma);
+R=returnR(dimgH(i,j),X,Chroma,MinRGB);
+G=returnG(dimgH(i,j),X,Chroma,MinRGB);
+B=returnB(dimgH(i,j),X,Chroma,MinRGB);
+dimg2(i,j,1)=R;dimg2(i,j,2)=G;dimg2(i,j,3)=B;
+end;
+end;
+
+minimum=min(dimg2(:));
+maksimum=max(dimg2(:));
+dimg2=(dimg2-minimum)/(maksimum-minimum)*255;
+
+
+dimgPS=porownanievPSmnoznik(dimg,dimg2,1000000);
+dimgV2=porownaniev2mnoznik(dimg,dimg2,1000000);
+
+
+hold on
+subplot(1,2,1);
+imshow(dimgPS/255);
+title("porownanie v.PS * 1000000");
+subplot(1,2,2);
+imshow(dimgV2/255);
+title("porownanie v.2 * 1000000");
+hold off
+
+//zad3
+img8=imread("rzeczka_mniejsza.jpg");
+dimg=double(img8);
+
+function wyjsciek= returnH(R,G,B,MaxRGB,Chroma)
+if (Chroma<=0.001)
+wyjscie=0;
+elseif (R==MaxRGB&&Chroma>0.001)
+wyjscie=mod((G-B)/Chroma,6);
+elseif (G==MaxRGB&&Chroma>0.001)
+wyjscie=((B-R)/Chroma)+2;
+elseif (B==MaxRGB&&Chroma>0.001)
+wyjscie=((R-G)/Chroma)+4;
+end;
+wyjsciek=wyjscie*60;
+end;
+
+function wyjscie=returnL(MinRGB,MaxRGB)
+wyjscie=(MaxRGB+MinRGB)/2;
+end;
+
+function wyjscie=returnS(L,Chroma)
+if (L<=0.001||L>=0.999)
+wyjscie=0;
+else
+wyjscie=Chroma/(1-abs(2*L-1));
+end;
+end;
+
+function wyjscieK=returnR(H,X,Chroma,MinRGB)
+if (H>=0&&H<=60)
+wyjscie=Chroma;
+elseif (H>60&&H<=120)
+wyjscie=X;
+elseif (H>120&&H<=180)
+wyjscie=0;
+elseif (H>180&&H<=240)
+wyjscie=0;
+elseif (H>240&&H<=300)
+wyjscie=X;
+elseif (H>300&&H<=360)
+wyjscie=Chroma;
+end;
+wyjscieK=wyjscie+MinRGB;
+end;
+
+function wyjscieK=returnG(H,X,Chroma,MinRGB)
+if (H>=0&&H<=60)
+wyjscie=X;
+elseif (H>60&&H<=120)
+wyjscie=Chroma;
+elseif (H>120&&H<=180)
+wyjscie=Chroma;
+elseif (H>180&&H<=240)
+wyjscie=X;
+elseif (H>240&&H<=300)
+wyjscie=0;
+elseif (H>300&&H<=360)
+wyjscie=0;
+end;
+wyjscieK=wyjscie+MinRGB;
+end;
+
+
+function wyjscieK=returnB(H,X,Chroma,MinRGB)
+if (H>=0&&H<=60)
+wyjscie=0;
+elseif (H>60&&H<=120)
+wyjscie=0;
+elseif (H>120&&H<=180)
+wyjscie=X;
+elseif (H>180&&H<=240)
+wyjscie=Chroma;
+elseif (H>240&&H<=300)
+wyjscie=Chroma;
+elseif (H>300&&H<=360)
+wyjscie=X;
+end;
+wyjscieK=wyjscie+MinRGB;
+end;
+
+function wyjscie=returnChroma(L,S)
+wyjscie=(1-abs(2*L-1))*S;
+end;
+
+function wyjscie=returnX(Chroma,H)
+wyjscie=Chroma*(1-abs(mod(H/60,2)-1));
+end;
+
+function wyjscie=returnMinRGB(L,Chroma)
+wyjscie=L-(Chroma/2);
+end;
+
+
+minimum=min(dimg(:));
+maksimum=max(dimg(:));
+dimg2=(dimg-minimum)/(maksimum-minimum)*1;
+
+dimgR=dimg2(:,:,1);
+dimgG=dimg2(:,:,2);
+dimgB=dimg2(:,:,3);
+
+
+
+for i=1:size(dimg,1)
+for j=1:size(dimg,2)
+
+MaxRGB=max([dimgR(i,j),dimgG(i,j),dimgB(i,j)]);
+MinRGB=min([dimgR(i,j),dimgG(i,j),dimgB(i,j)]);
+Chroma=MaxRGB-MinRGB;
+
+dimgH(i,j)=returnH(dimgR(i,j),dimgG(i,j),dimgB(i,j),MaxRGB,Chroma);
+L=returnL(MinRGB,MaxRGB);
+dimgL(i,j)=L;
+dimgS(i,j)=returnS(L,Chroma);
+
+dimgH(i,j)=dimgH(i,j)-50;
+if (dimgH(i,j)<0)
+dimgH(i,j)=dimgH(i,j)+360;
+end;
+
+Chroma=returnChroma(L,dimgS(i,j));
+X=returnX(Chroma,dimgH(i,j));
+MinRGB=returnMinRGB(L,Chroma);
+R=returnR(dimgH(i,j),X,Chroma,MinRGB);
+G=returnG(dimgH(i,j),X,Chroma,MinRGB);
+B=returnB(dimgH(i,j),X,Chroma,MinRGB);
+dimg2(i,j,1)=R;dimg2(i,j,2)=G;dimg2(i,j,3)=B;
+end;
+end;
+
+minimum=min(dimg2(:));
+maksimum=max(dimg2(:));
+dimg2=(dimg2-minimum)/(maksimum-minimum)*255;
+
+
+
+
+hold on
+subplot(1,2,1);
+imshow(dimg/255);
+title("org");
+subplot(1,2,2);
+imshow(dimg2/255);
+title("HUE -50");
+hold off
+
+//zad4
+img8=imread("rzeczka_mniejsza.jpg");
+dimg=double(img8);
+
+function wyjsciek= returnH(R,G,B,MaxRGB,Chroma)
+if (Chroma<=0.001)
+wyjscie=0;
+elseif (R==MaxRGB&&Chroma>0.001)
+wyjscie=mod((G-B)/Chroma,6);
+elseif (G==MaxRGB&&Chroma>0.001)
+wyjscie=((B-R)/Chroma)+2;
+elseif (B==MaxRGB&&Chroma>0.001)
+wyjscie=((R-G)/Chroma)+4;
+end;
+wyjsciek=wyjscie*60;
+end;
+
+function wyjscie=returnL(MinRGB,MaxRGB)
+wyjscie=(MaxRGB+MinRGB)/2;
+end;
+
+function wyjscie=returnS(L,Chroma)
+if (L<=0.001||L>=0.999)
+wyjscie=0;
+else
+wyjscie=Chroma/(1-abs(2*L-1));
+end;
+end;
+
+function wyjscieK=returnR(H,X,Chroma,MinRGB)
+if (H>=0&&H<=60)
+wyjscie=Chroma;
+elseif (H>60&&H<=120)
+wyjscie=X;
+elseif (H>120&&H<=180)
+wyjscie=0;
+elseif (H>180&&H<=240)
+wyjscie=0;
+elseif (H>240&&H<=300)
+wyjscie=X;
+elseif (H>300&&H<=360)
+wyjscie=Chroma;
+end;
+wyjscieK=wyjscie+MinRGB;
+end;
+
+function wyjscieK=returnG(H,X,Chroma,MinRGB)
+if (H>=0&&H<=60)
+wyjscie=X;
+elseif (H>60&&H<=120)
+wyjscie=Chroma;
+elseif (H>120&&H<=180)
+wyjscie=Chroma;
+elseif (H>180&&H<=240)
+wyjscie=X;
+elseif (H>240&&H<=300)
+wyjscie=0;
+elseif (H>300&&H<=360)
+wyjscie=0;
+end;
+wyjscieK=wyjscie+MinRGB;
+end;
+
+
+function wyjscieK=returnB(H,X,Chroma,MinRGB)
+if (H>=0&&H<=60)
+wyjscie=0;
+elseif (H>60&&H<=120)
+wyjscie=0;
+elseif (H>120&&H<=180)
+wyjscie=X;
+elseif (H>180&&H<=240)
+wyjscie=Chroma;
+elseif (H>240&&H<=300)
+wyjscie=Chroma;
+elseif (H>300&&H<=360)
+wyjscie=X;
+end;
+wyjscieK=wyjscie+MinRGB;
+end;
+
+function wyjscie=returnChroma(L,S)
+wyjscie=(1-abs(2*L-1))*S;
+end;
+
+function wyjscie=returnX(Chroma,H)
+wyjscie=Chroma*(1-abs(mod(H/60,2)-1));
+end;
+
+function wyjscie=returnMinRGB(L,Chroma)
+wyjscie=L-(Chroma/2);
+end;
+
+
+minimum=min(dimg(:));
+maksimum=max(dimg(:));
+dimg2=(dimg-minimum)/(maksimum-minimum)*1;
+
+dimgR=dimg2(:,:,1);
+dimgG=dimg2(:,:,2);
+dimgB=dimg2(:,:,3);
+
+
+
+for i=1:size(dimg,1)
+for j=1:size(dimg,2)
+
+MaxRGB=max([dimgR(i,j),dimgG(i,j),dimgB(i,j)]);
+MinRGB=min([dimgR(i,j),dimgG(i,j),dimgB(i,j)]);
+Chroma=MaxRGB-MinRGB;
+
+dimgH(i,j)=returnH(dimgR(i,j),dimgG(i,j),dimgB(i,j),MaxRGB,Chroma);
+L=returnL(MinRGB,MaxRGB);
+dimgL(i,j)=L;
+dimgS(i,j)=returnS(L,Chroma);
+
+dimgS(i,j)=dimgS(i,j)^(1/1.5);
+
+Chroma=returnChroma(L,dimgS(i,j));
+X=returnX(Chroma,dimgH(i,j));
+MinRGB=returnMinRGB(L,Chroma);
+R=returnR(dimgH(i,j),X,Chroma,MinRGB);
+G=returnG(dimgH(i,j),X,Chroma,MinRGB);
+B=returnB(dimgH(i,j),X,Chroma,MinRGB);
+dimg2(i,j,1)=R;dimg2(i,j,2)=G;dimg2(i,j,3)=B;
+end;
+end;
+
+minimum=min(dimg2(:));
+maksimum=max(dimg2(:));
+dimg2=(dimg2-minimum)/(maksimum-minimum)*255;
+
+
+
+
+hold on
+subplot(1,2,1);
+imshow(dimg/255);
+title("org");
+subplot(1,2,2);
+imshow(dimg2/255);
+title("Saturation gamma 1.5");
+hold off
+
+//zad5
+img8=imread("rzeczka_mniejsza.jpg");
+dimg=double(img8);
+
+function wyjsciek= returnH(R,G,B,MaxRGB,Chroma)
+if (Chroma<=0.001)
+wyjscie=0;
+elseif (R==MaxRGB&&Chroma>0.001)
+wyjscie=mod((G-B)/Chroma,6);
+elseif (G==MaxRGB&&Chroma>0.001)
+wyjscie=((B-R)/Chroma)+2;
+elseif (B==MaxRGB&&Chroma>0.001)
+wyjscie=((R-G)/Chroma)+4;
+end;
+wyjsciek=wyjscie*60;
+end;
+
+function wyjscie=returnL(MinRGB,MaxRGB)
+wyjscie=(MaxRGB+MinRGB)/2;
+end;
+
+function wyjscie=returnS(L,Chroma)
+if (L<=0.001||L>=0.999)
+wyjscie=0;
+else
+wyjscie=Chroma/(1-abs(2*L-1));
+end;
+end;
+
+function wyjscieK=returnR(H,X,Chroma,MinRGB)
+if (H>=0&&H<=60)
+wyjscie=Chroma;
+elseif (H>60&&H<=120)
+wyjscie=X;
+elseif (H>120&&H<=180)
+wyjscie=0;
+elseif (H>180&&H<=240)
+wyjscie=0;
+elseif (H>240&&H<=300)
+wyjscie=X;
+elseif (H>300&&H<=360)
+wyjscie=Chroma;
+end;
+wyjscieK=wyjscie+MinRGB;
+end;
+
+function wyjscieK=returnG(H,X,Chroma,MinRGB)
+if (H>=0&&H<=60)
+wyjscie=X;
+elseif (H>60&&H<=120)
+wyjscie=Chroma;
+elseif (H>120&&H<=180)
+wyjscie=Chroma;
+elseif (H>180&&H<=240)
+wyjscie=X;
+elseif (H>240&&H<=300)
+wyjscie=0;
+elseif (H>300&&H<=360)
+wyjscie=0;
+end;
+wyjscieK=wyjscie+MinRGB;
+end;
+
+
+function wyjscieK=returnB(H,X,Chroma,MinRGB)
+if (H>=0&&H<=60)
+wyjscie=0;
+elseif (H>60&&H<=120)
+wyjscie=0;
+elseif (H>120&&H<=180)
+wyjscie=X;
+elseif (H>180&&H<=240)
+wyjscie=Chroma;
+elseif (H>240&&H<=300)
+wyjscie=Chroma;
+elseif (H>300&&H<=360)
+wyjscie=X;
+end;
+wyjscieK=wyjscie+MinRGB;
+end;
+
+function wyjscie=returnChroma(L,S)
+wyjscie=(1-abs(2*L-1))*S;
+end;
+
+function wyjscie=returnX(Chroma,H)
+wyjscie=Chroma*(1-abs(mod(H/60,2)-1));
+end;
+
+function wyjscie=returnMinRGB(L,Chroma)
+wyjscie=L-(Chroma/2);
+end;
+
+
+minimum=min(dimg(:));
+maksimum=max(dimg(:));
+dimg2=(dimg-minimum)/(maksimum-minimum)*1;
+
+dimgR=dimg2(:,:,1);
+dimgG=dimg2(:,:,2);
+dimgB=dimg2(:,:,3);
+
+
+
+for i=1:size(dimg,1)
+for j=1:size(dimg,2)
+
+MaxRGB=max([dimgR(i,j),dimgG(i,j),dimgB(i,j)]);
+MinRGB=min([dimgR(i,j),dimgG(i,j),dimgB(i,j)]);
+Chroma=MaxRGB-MinRGB;
+
+dimgH(i,j)=returnH(dimgR(i,j),dimgG(i,j),dimgB(i,j),MaxRGB,Chroma);
+L=returnL(MinRGB,MaxRGB);
+L=L^(1/0.7);
+dimgL(i,j)=L;
+dimgS(i,j)=returnS(L,Chroma);
+
+
+
+Chroma=returnChroma(L,dimgS(i,j));
+X=returnX(Chroma,dimgH(i,j));
+MinRGB=returnMinRGB(L,Chroma);
+R=returnR(dimgH(i,j),X,Chroma,MinRGB);
+G=returnG(dimgH(i,j),X,Chroma,MinRGB);
+B=returnB(dimgH(i,j),X,Chroma,MinRGB);
+dimg2(i,j,1)=R;dimg2(i,j,2)=G;dimg2(i,j,3)=B;
+end;
+end;
+
+minimum=min(dimg2(:));
+maksimum=max(dimg2(:));
+dimg2=(dimg2-minimum)/(maksimum-minimum)*255;
+
+
+
+
+hold on
+subplot(1,2,1);
+imshow(dimg/255);
+title("org");
+subplot(1,2,2);
+imshow(dimg2/255);
+title("Lightness gamma 0.7");
+hold off
+
+
+//zad6
+img8=imread("rzeczka_mniejsza.jpg");
+dimg=double(img8);
+
+function wyjsciek= returnH(R,G,B,MaxRGB,Chroma)
+if (Chroma<=0.001)
+wyjscie=0;
+elseif (R==MaxRGB&&Chroma>0.001)
+wyjscie=mod((G-B)/Chroma,6);
+elseif (G==MaxRGB&&Chroma>0.001)
+wyjscie=((B-R)/Chroma)+2;
+elseif (B==MaxRGB&&Chroma>0.001)
+wyjscie=((R-G)/Chroma)+4;
+end;
+wyjsciek=wyjscie*60;
+end;
+
+function wyjscie=returnL(MinRGB,MaxRGB)
+wyjscie=(MaxRGB+MinRGB)/2;
+end;
+
+function wyjscie=returnS(L,Chroma)
+if (L<=0.001||L>=0.999)
+wyjscie=0;
+else
+wyjscie=Chroma/(1-abs(2*L-1));
+end;
+end;
+
+function wyjscieK=returnR(H,X,Chroma,MinRGB)
+if (H>=0&&H<=60)
+wyjscie=Chroma;
+elseif (H>60&&H<=120)
+wyjscie=X;
+elseif (H>120&&H<=180)
+wyjscie=0;
+elseif (H>180&&H<=240)
+wyjscie=0;
+elseif (H>240&&H<=300)
+wyjscie=X;
+elseif (H>300&&H<=360)
+wyjscie=Chroma;
+end;
+wyjscieK=wyjscie+MinRGB;
+end;
+
+function wyjscieK=returnG(H,X,Chroma,MinRGB)
+if (H>=0&&H<=60)
+wyjscie=X;
+elseif (H>60&&H<=120)
+wyjscie=Chroma;
+elseif (H>120&&H<=180)
+wyjscie=Chroma;
+elseif (H>180&&H<=240)
+wyjscie=X;
+elseif (H>240&&H<=300)
+wyjscie=0;
+elseif (H>300&&H<=360)
+wyjscie=0;
+end;
+wyjscieK=wyjscie+MinRGB;
+end;
+
+
+function wyjscieK=returnB(H,X,Chroma,MinRGB)
+if (H>=0&&H<=60)
+wyjscie=0;
+elseif (H>60&&H<=120)
+wyjscie=0;
+elseif (H>120&&H<=180)
+wyjscie=X;
+elseif (H>180&&H<=240)
+wyjscie=Chroma;
+elseif (H>240&&H<=300)
+wyjscie=Chroma;
+elseif (H>300&&H<=360)
+wyjscie=X;
+end;
+wyjscieK=wyjscie+MinRGB;
+end;
+
+function wyjscie=returnChroma(L,S)
+wyjscie=(1-abs(2*L-1))*S;
+end;
+
+function wyjscie=returnX(Chroma,H)
+wyjscie=Chroma*(1-abs(mod(H/60,2)-1));
+end;
+
+function wyjscie=returnMinRGB(L,Chroma)
+wyjscie=L-(Chroma/2);
+end;
+
+
+minimum=min(dimg(:));
+maksimum=max(dimg(:));
+dimg2=(dimg-minimum)/(maksimum-minimum)*1;
+
+dimgR=dimg2(:,:,1);
+dimgG=dimg2(:,:,2);
+dimgB=dimg2(:,:,3);
+
+
+
+for i=1:size(dimg,1)
+for j=1:size(dimg,2)
+
+MaxRGB=max([dimgR(i,j),dimgG(i,j),dimgB(i,j)]);
+MinRGB=min([dimgR(i,j),dimgG(i,j),dimgB(i,j)]);
+Chroma=MaxRGB-MinRGB;
+
+dimgH(i,j)=returnH(dimgR(i,j),dimgG(i,j),dimgB(i,j),MaxRGB,Chroma);
+L=returnL(MinRGB,MaxRGB);
+dimgL(i,j)=L;
+dimgS(i,j)=returnS(L,Chroma);
+
+if (dimgS(i,j)>0)
+L=0.5;
+dimgL(i,j)=L;
+dimgS(i,j)=1;
+end;
+
+Chroma=returnChroma(L,dimgS(i,j));
+X=returnX(Chroma,dimgH(i,j));
+MinRGB=returnMinRGB(L,Chroma);
+R=returnR(dimgH(i,j),X,Chroma,MinRGB);
+G=returnG(dimgH(i,j),X,Chroma,MinRGB);
+B=returnB(dimgH(i,j),X,Chroma,MinRGB);
+dimg2(i,j,1)=R;dimg2(i,j,2)=G;dimg2(i,j,3)=B;
+end;
+end;
+
+minimum=min(dimg2(:));
+maksimum=max(dimg2(:));
+dimg2=(dimg2-minimum)/(maksimum-minimum)*255;
+
+
+
+
+hold on
+subplot(1,2,1);
+imshow(dimg/255);
+title("org");
+subplot(1,2,2);
+imshow(dimg2/255);
+title("Jeśli Sat.>0, Lightness=0.5 i Saturation=1");
+hold off
