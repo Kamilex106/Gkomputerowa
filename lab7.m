@@ -50,7 +50,7 @@ endfunction
 
 dimg2=znajdz_wyjsciowe(dimg,333,222);
 imshow(dimg2/255);
-imwrite(dimg2,"zad1.jpg");
+imwrite(dimg2/255,"zad1.jpg");
 
 %zad2
 
@@ -79,7 +79,7 @@ endfunction
 
 dimg2=znajdz_wyjsciowe(dimg,1366,768);
 imshow(dimg2/255);
-imwrite(dimg2,"zad2.jpg");
+imwrite(dimg2/255,"zad2.jpg");
 
 %zad3
 
@@ -107,7 +107,7 @@ endfunction
 
 dimg2=znajdz_wyjsciowe(dimg,672,788);
 imshow(dimg2/255);
-imwrite(dimg2,"zad3.png");
+imwrite(dimg2/255,"zad3.png");
 
 %zad4
 
@@ -136,7 +136,7 @@ endfunction
 
 dimg2=znajdz_wyjsciowe(dimg,900,432);
 imshow(dimg2/255);
-imwrite(dimg2,"zad4.png");
+imwrite(dimg2/255,"zad4.png");
 
 %zad5
 
@@ -165,7 +165,7 @@ endfunction
 
 dimg2=znajdz_wyjsciowe(dimg,600,246);
 imshow(dimg2/255);
-imwrite(dimg2,"zad5.png");
+imwrite(dimg2/255,"zad5.png");
 
 %zad6
 
@@ -193,4 +193,4 @@ endfunction
 
 dimg2=znajdz_wyjsciowe(dimg,400,400);
 imshow(dimg2/255);
-imwrite(dimg2,"zad6.png");
+imwrite(dimg2/255,"zad6.png");
